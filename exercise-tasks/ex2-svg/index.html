@@ -13,60 +13,14 @@
             rel="stylesheet"
             href="style.css"
         />
-        <script src="drawing.js"></script>
     </head>
     <body>
-        <h1>More drawing to canvas</h1>
-        <canvas
-            id="asteroids"
-            width="400"
-            height="400"
-        ></canvas>
-        <script>
-            const canvas = document.getElementById('asteroids');
-            const context = canvas.getContext('2d');
-            drawGrid(context);
+        <h1>More drawing in SVG</h1>
+        <!-- prettier-ignore -->
+        <svg id="asteroids" version="1.1" width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100%" height="100%" fill="black"></rect>
+        </svg>
 
-            context.beginPath();
-            context.strokeStyle = '#FFFFFF';
-            context.fillStyle = '#00FF00';
-            context.lineWidth = 2;
-
-            context.moveTo(50, 50);
-            context.fillText('(50,50)', 30, 40);
-            context.bezierCurveTo(0, 0, 80, 250, 150, 250);
-            context.fillText('(150, 250)', 130, 260);
-            context.bezierCurveTo(250, 250, 250, 250, 250, 170);
-            context.fillText('(250, 170)', 255, 175);
-            context.bezierCurveTo(250, 50, 400, 340, 320, 280);
-            context.fillText('(320, 280)', 320, 280);
-
-            context.closePath();
-            context.stroke();
-
-            context.beginPath();
-            context.strokeStyle = 'yellow';
-            context.fillStyle = 'black';
-
-            context.moveTo(250, 50);
-            context.quadraticCurveTo(310, 60, 370, 50);
-            context.quadraticCurveTo(400, 75, 370, 100);
-            context.closePath();
-
-            context.moveTo(50, 250);
-            context.quadraticCurveTo(25, 300, 50, 350);
-            context.quadraticCurveTo(100, 375, 150, 350);
-            context.closePath();
-
-            context.moveTo(270, 310);
-            context.quadraticCurveTo(255, 340, 270, 360);
-            context.quadraticCurveTo(255, 340, 230, 360);
-            context.closePath();
-
-            context.fill();
-
-            context.stroke();
-            context.closePath();
-        </script>
+        <script src="drawing.js"></script>
     </body>
 </html>

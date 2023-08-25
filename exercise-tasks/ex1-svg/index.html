@@ -8,48 +8,39 @@
             name="viewport"
             content="width=device-width, initial-scale=1.0"
         />
-        <title>This is an HTML canvas</title>
+        <title>This is a SVG</title>
         <style media="screen">
             body {
                 text-align: center;
                 font-family: sans-serif;
             }
 
-            canvas {
-                background-color: black;
+            .stick-figure {
+                stroke: white;
+                stroke-width: 2;
             }
         </style>
     </head>
     <body>
         <h1>This is SVG</h1>
-        <svg
-            version="1.1"
-            width="300"
-            height="200"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <rect
-                width="100%"
-                height="100%"
-                fill="red"
-            />
-
-            <circle
-                cx="150"
-                cy="100"
-                r="80"
-                fill="green"
-            />
-
-            <text
-                x="150"
-                y="125"
-                font-size="60"
-                text-anchor="middle"
-                fill="white"
-            >
-                SVG
-            </text>
+        <!-- prettier-ignore -->
+        <svg version="1.1" width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100%" height="100%" fill="black"/>
+            <rect x="75" y="50" width="250" height="300" fill="dimgrey" stroke="white" stroke-width="5"/>
+            <text x="200" y="100" font-size="34" text-anchor="middle" fill="#FFAAAA" stroke="#FF2222">2D Drawing</text>
+            <line class="stick-figure" x1="200" y1="160" x2="200" y2="220"/>
+            <line class="stick-figure" x1="200" y1="160" x2="200" y2="220"/>
+            <line class="stick-figure" x1="180" y1="300" x2="185" y2="260"/>
+            <line class="stick-figure" x1="185" y1="260" x2="200" y2="220"/>
+            <line class="stick-figure" x1="200" y1="220" x2="215" y2="260"/>
+            <line class="stick-figure" x1="215" y1="260" x2="220" y2="300"/>
+            <line class="stick-figure" x1="240" y1="130" x2="225" y2="170"/>
+            <line class="stick-figure" x1="225" y1="170" x2="200" y2="170"/>
+            <line class="stick-figure" x1="200" y1="170" x2="175" y2="180"/>
+            <line class="stick-figure" x1="175" y1="180" x2="170" y2="220"/>
+            <line class="stick-figure" x1="175" y1="180" x2="170" y2="220"/>
+            <circle class="stick-figure" cx="200" cy="140" r="20" fill="transparent" />
+            <text x="200" y="330" font-size="24" text-anchor="middle" fill="#FFAAAA" stroke="#FF2222">its quite easy</text>
         </svg>
 
         <script></script>
