@@ -1,5 +1,46 @@
 /** @format */
 
+const shapes = [
+    {
+        coordinates: [
+            {x: 50, y: 50, textX: 30, textY: 40},
+            {x: 150, y: 250, textX: 130, textY: 260},
+            {x: 250, y: 170, textX: 255, textY: 175},
+            {x: 320, y: 280}
+        ],
+        drawCoordinates: true,
+        lineColor: 'white',
+        fontColor: '#00FF00',
+        fillColor: 'transparent'
+    },
+    {
+        coordinates: [
+            {x: 50, y: 250},
+            {x: 50, y: 350},
+            {x: 150, y: 350}
+        ],
+        lineColor: 'yellow',
+        fillColor: 'black'
+    },
+    {
+        coordinates: [
+            {x: 250, y: 50},
+            {x: 370, y: 50},
+            {x: 370, y: 100}
+        ],
+        lineColor: 'yellow',
+        fillColor: 'black'
+    },
+    {
+        coordinates: [
+            {x: 270, y: 310},
+            {x: 270, y: 360},
+            {x: 230, y: 360}
+        ],
+        lineColor: 'yellow',
+        fillColor: 'black'
+    }
+];
 function drawGridAttribute(minor = 10, major = minor * 5, lineColor = '#00FF00', textColor = '#009900') {
     console.log('drawing');
     const asteroids = document.querySelector('#asteroids');
@@ -130,45 +171,16 @@ function drawCoordinates(coordinates, color = 'white', fontSize = 8) {
     }
 }
 
-function drawShapes() {
+function drawStraightShapes(shapes) {
     const asteroids = document.querySelector('#asteroids');
-    const fontColor = '#00FF00';
-    const primaryLineColor = 'white';
-    const secondaryLineColor = 'yellow';
-    const secondaryFillColor = '#000000';
-
-    const shape1 = [
-        {x: 50, y: 50, textX: 30, textY: 40},
-        {x: 150, y: 250, textX: 130, textY: 260},
-        {x: 250, y: 170, textX: 255, textY: 175},
-        {x: 320, y: 280}
-    ];
-
-    const shape2 = [
-        {x: 50, y: 250},
-        {x: 50, y: 350},
-        {x: 150, y: 350}
-    ];
-
-    const shape3 = [
-        {x: 250, y: 50},
-        {x: 370, y: 50},
-        {x: 370, y: 100}
-    ];
-
-    const shape4 = [
-        {x: 270, y: 310},
-        {x: 270, y: 360},
-        {x: 230, y: 360}
-    ];
-
-    asteroids.appendChild(drawPaths(shape1, true, primaryLineColor));
-    asteroids.innerHTML += drawCoordinates(shape1, fontColor);
-
-    asteroids.appendChild(drawPaths(shape2, true, secondaryLineColor, secondaryFillColor));
-    asteroids.appendChild(drawPaths(shape3, true, secondaryLineColor, secondaryFillColor));
-    asteroids.appendChild(drawPaths(shape4, true, secondaryLineColor, secondaryFillColor));
+    shapes.forEach((shape) => {
+        asteroids.appendChild(drawPaths(shape.coordinates, true, shape.lineColor, shape.fillColor));
+        if (shape.drawCoordinates != undefined) {
+            console.log('here');
+            asteroids.innerHTML += drawCoordinates(shape.coordinates, shape.fontColor);
+        }
+    });
 }
 
 drawGrid();
-drawShapes();
+drawStraightShapes(shapes);
