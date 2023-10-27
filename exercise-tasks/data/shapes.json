@@ -6,19 +6,31 @@
                     "x": 50,
                     "y": 50,
                     "textX": 30,
-                    "textY": 40
+                    "textY": 40,
+                    "cubicCurveX1": 0,
+                    "cubicCurveY1": 0,
+                    "cubicCurveX2": 80,
+                    "cubicCurveY2": 250
                 },
                 {
                     "x": 150,
                     "y": 250,
                     "textX": 130,
-                    "textY": 260
+                    "textY": 260,
+                    "cubicCurveX1": 250,
+                    "cubicCurveY1": 250,
+                    "cubicCurveX2": 250,
+                    "cubicCurveY2": 250
                 },
                 {
                     "x": 250,
                     "y": 170,
                     "textX": 255,
-                    "textY": 175
+                    "textY": 175,
+                    "cubicCurveX1": 250,
+                    "cubicCurveY1": 50,
+                    "cubicCurveX2": 400,
+                    "cubicCurveY2": 350
                 },
                 {
                     "x": 320,
@@ -26,6 +38,7 @@
                 }
             ],
             "drawCoordinates": true,
+            "drawWithCurve": true,
             "lineColor": "white",
             "fontColor": "#00FF00",
             "fillColor": "transparent"
@@ -35,14 +48,14 @@
                 {
                     "x": 50,
                     "y": 250,
-                    "curveX": 25,
-                    "curveY": 300
+                    "quadraticCurveX": 25,
+                    "quadraticCurveY": 300
                 },
                 {
                     "x": 50,
                     "y": 350,
-                    "curveX": 100,
-                    "curveY": 375
+                    "quadraticCurveX": 100,
+                    "quadraticCurveY": 375
                 },
                 {
                     "x": 150,
@@ -58,14 +71,14 @@
                 {
                     "x": 250,
                     "y": 50,
-                    "curveX": 310,
-                    "curveY": 60
+                    "quadraticCurveX": 310,
+                    "quadraticCurveY": 60
                 },
                 {
                     "x": 370,
                     "y": 50,
-                    "curveX": 400,
-                    "curveY": 75
+                    "quadraticCurveX": 400,
+                    "quadraticCurveY": 75
                 },
                 {
                     "x": 370,
@@ -81,14 +94,14 @@
                 {
                     "x": 270,
                     "y": 310,
-                    "curveX": 255,
-                    "curveY": 340
+                    "quadraticCurveX": 255,
+                    "quadraticCurveY": 340
                 },
                 {
                     "x": 270,
                     "y": 360,
-                    "curveX": 255,
-                    "curveY": 340
+                    "quadraticCurveX": 255,
+                    "quadraticCurveY": 340
                 },
                 {
                     "x": 230,

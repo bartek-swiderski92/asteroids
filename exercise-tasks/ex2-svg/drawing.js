@@ -108,10 +108,10 @@ function drawPaths(coordinates, closed = true, color = 'white', fill = 'transpar
         outputElement.setAttribute('stroke-width', strokeWidth);
 
         for (let i = 0; i < coordinates.length; i++) {
-            const startingPoint = coordinates[i];
+            const {x, y} = coordinates[i];
 
             dAttribute += i === 0 ? 'M ' : 'L ';
-            dAttribute += `${startingPoint.x} ${startingPoint.y}, `;
+            dAttribute += `${x} ${y}, `;
         }
         dAttribute += closed ? 'z' : '';
         outputElement.setAttribute('d', dAttribute);
@@ -123,8 +123,8 @@ function drawCoordinates(coordinates, color = 'white', fontSize = 8) {
     if (Array.isArray(coordinates) === true) {
         let outputString = '';
         for (let i = 0; i < coordinates.length; i++) {
-            const coordinate = coordinates[i];
-            outputString += /*html*/ `<text x="${coordinate.textX ?? coordinate.x}" y="${coordinate.textY ?? coordinate.y}" fill="${color}" font-size="${fontSize}">(${coordinate.x}, ${coordinate.y})</text>`;
+            const {textX, textY, x, y} = coordinates[i];
+            outputString += /*html*/ `<text x="${textX ?? x}" y="${textY ?? y}" fill="${color}" font-size="${fontSize}">(${x}, ${y})</text>`;
         }
         return outputString;
     }
@@ -148,12 +148,14 @@ function drawCurves(coordinates, closed = true, color = 'white', fill = 'transpa
         outputElement.setAttribute('stroke-width', strokeWidth);
 
         for (let i = 0; i < coordinates.length; i++) {
-            const startingPoint = coordinates[i];
+            let {x, y, quadraticCurveX, quadraticCurveY, cubicCurveX1, cubicCurveY1, cubicCurveX2, cubicCurveY2} = coordinates[i];
 
             dAttribute += i === 0 ? 'M ' : '';
-            dAttribute += `${startingPoint.x} ${startingPoint.y} `;
-            if (startingPoint.curveX != undefined && startingPoint.curveY != undefined) {
-                dAttribute += `Q ${startingPoint.curveX} ${startingPoint.curveY} `;
+            dAttribute += `${x} ${y} `;
+            if (quadraticCurveX && quadraticCurveY) {
+                dAttribute += `Q ${quadraticCurveX} ${quadraticCurveY} `;
+            } else if (cubicCurveX1 && cubicCurveY1 && cubicCurveX2 && cubicCurveY2) {
+                dAttribute += `C ${cubicCurveX1} ${cubicCurveY1} ${cubicCurveX2} ${cubicCurveY2} `;
             }
         }
         dAttribute += closed ? 'z' : '';
@@ -168,9 +170,9 @@ function drawCurvedShapes(shapes) {
             asteroids.appendChild(drawCurves(shape.coordinates, true, shape.lineColor, shape.fillColor));
         } else {
             asteroids.appendChild(drawPaths(shape.coordinates, true, shape.lineColor, shape.fillColor));
-            if (shape.drawCoordinates != undefined) {
-                asteroids.innerHTML += drawCoordinates(shape.coordinates, shape.fontColor);
-            }
+        }
+        if (shape.drawCoordinates != undefined) {
+            asteroids.innerHTML += drawCoordinates(shape.coordinates, shape.fontColor);
         }
     });
 }
