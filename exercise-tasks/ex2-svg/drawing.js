@@ -111,7 +111,7 @@ function drawPaths(coordinates, closed = true, color = 'white', fill = 'transpar
             const startingPoint = coordinates[i];
 
             dAttribute += i === 0 ? 'M ' : 'L ';
-            dAttribute += `${startingPoint.x} ${startingPoint.y} `;
+            dAttribute += `${startingPoint.x} ${startingPoint.y}, `;
         }
         dAttribute += closed ? 'z' : '';
         outputElement.setAttribute('d', dAttribute);
@@ -134,14 +134,47 @@ function drawStraightShapes(shapes) {
     shapes.forEach((shape) => {
         asteroids.appendChild(drawPaths(shape.coordinates, true, shape.lineColor, shape.fillColor));
         if (shape.drawCoordinates != undefined) {
-            console.log('here');
             asteroids.innerHTML += drawCoordinates(shape.coordinates, shape.fontColor);
         }
     });
 }
 
-function drawCurvedShapes() {}
+function drawCurves(coordinates, closed = true, color = 'white', fill = 'transparent', strokeWidth = '2') {
+    if (Array.isArray(coordinates) === true && coordinates.length > 1) {
+        let dAttribute = '';
+        let outputElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        outputElement.setAttribute('fill', fill);
+        outputElement.setAttribute('stroke', color);
+        outputElement.setAttribute('stroke-width', strokeWidth);
+
+        for (let i = 0; i < coordinates.length; i++) {
+            const startingPoint = coordinates[i];
+
+            dAttribute += i === 0 ? 'M ' : '';
+            dAttribute += `${startingPoint.x} ${startingPoint.y} `;
+            if (startingPoint.curveX != undefined && startingPoint.curveY != undefined) {
+                dAttribute += `Q ${startingPoint.curveX} ${startingPoint.curveY} `;
+            }
+        }
+        dAttribute += closed ? 'z' : '';
+        outputElement.setAttribute('d', dAttribute);
+        return outputElement;
+    }
+}
+
+function drawCurvedShapes(shapes) {
+    shapes.forEach((shape) => {
+        if (shape.drawWithCurve === true) {
+            asteroids.appendChild(drawCurves(shape.coordinates, true, shape.lineColor, shape.fillColor));
+        } else {
+            asteroids.appendChild(drawPaths(shape.coordinates, true, shape.lineColor, shape.fillColor));
+            if (shape.drawCoordinates != undefined) {
+                asteroids.innerHTML += drawCoordinates(shape.coordinates, shape.fontColor);
+            }
+        }
+    });
+}
 
 drawGrid();
-drawStraightShapes(shapes);
+// drawStraightShapes(shapes);
 drawCurvedShapes(shapes);

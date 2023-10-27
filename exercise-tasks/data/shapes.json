@@ -34,11 +34,15 @@
             "coordinates": [
                 {
                     "x": 50,
-                    "y": 250
+                    "y": 250,
+                    "curveX": 25,
+                    "curveY": 300
                 },
                 {
                     "x": 50,
-                    "y": 350
+                    "y": 350,
+                    "curveX": 100,
+                    "curveY": 375
                 },
                 {
                     "x": 150,
@@ -46,17 +50,22 @@
                 }
             ],
             "lineColor": "yellow",
-            "fillColor": "black"
+            "fillColor": "black",
+            "drawWithCurve": true
         },
         {
             "coordinates": [
                 {
                     "x": 250,
-                    "y": 50
+                    "y": 50,
+                    "curveX": 310,
+                    "curveY": 60
                 },
                 {
                     "x": 370,
-                    "y": 50
+                    "y": 50,
+                    "curveX": 400,
+                    "curveY": 75
                 },
                 {
                     "x": 370,
@@ -64,17 +73,22 @@
                 }
             ],
             "lineColor": "yellow",
-            "fillColor": "black"
+            "fillColor": "black",
+            "drawWithCurve": true
         },
         {
             "coordinates": [
                 {
                     "x": 270,
-                    "y": 310
+                    "y": 310,
+                    "curveX": 255,
+                    "curveY": 340
                 },
                 {
                     "x": 270,
-                    "y": 360
+                    "y": 360,
+                    "curveX": 255,
+                    "curveY": 340
                 },
                 {
                     "x": 230,
@@ -82,7 +96,8 @@
                 }
             ],
             "lineColor": "yellow",
-            "fillColor": "black"
+            "fillColor": "black",
+            "drawWithCurve": true
         }
     ]
 }
