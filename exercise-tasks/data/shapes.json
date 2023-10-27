@@ -1,0 +1,88 @@
+{
+    "shapes": [
+        {
+            "coordinates": [
+                {
+                    "x": 50,
+                    "y": 50,
+                    "textX": 30,
+                    "textY": 40
+                },
+                {
+                    "x": 150,
+                    "y": 250,
+                    "textX": 130,
+                    "textY": 260
+                },
+                {
+                    "x": 250,
+                    "y": 170,
+                    "textX": 255,
+                    "textY": 175
+                },
+                {
+                    "x": 320,
+                    "y": 280
+                }
+            ],
+            "drawCoordinates": true,
+            "lineColor": "white",
+            "fontColor": "#00FF00",
+            "fillColor": "transparent"
+        },
+        {
+            "coordinates": [
+                {
+                    "x": 50,
+                    "y": 250
+                },
+                {
+                    "x": 50,
+                    "y": 350
+                },
+                {
+                    "x": 150,
+                    "y": 350
+                }
+            ],
+            "lineColor": "yellow",
+            "fillColor": "black"
+        },
+        {
+            "coordinates": [
+                {
+                    "x": 250,
+                    "y": 50
+                },
+                {
+                    "x": 370,
+                    "y": 50
+                },
+                {
+                    "x": 370,
+                    "y": 100
+                }
+            ],
+            "lineColor": "yellow",
+            "fillColor": "black"
+        },
+        {
+            "coordinates": [
+                {
+                    "x": 270,
+                    "y": 310
+                },
+                {
+                    "x": 270,
+                    "y": 360
+                },
+                {
+                    "x": 230,
+                    "y": 360
+                }
+            ],
+            "lineColor": "yellow",
+            "fillColor": "black"
+        }
+    ]
+}

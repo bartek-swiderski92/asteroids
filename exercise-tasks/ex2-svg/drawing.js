@@ -1,49 +1,9 @@
 /** @format */
+import data from '../data/shapes.json' assert {type: 'json'};
+const asteroids = document.querySelector('#asteroids');
+const shapes = data.shapes;
 
-const shapes = [
-    {
-        coordinates: [
-            {x: 50, y: 50, textX: 30, textY: 40},
-            {x: 150, y: 250, textX: 130, textY: 260},
-            {x: 250, y: 170, textX: 255, textY: 175},
-            {x: 320, y: 280}
-        ],
-        drawCoordinates: true,
-        lineColor: 'white',
-        fontColor: '#00FF00',
-        fillColor: 'transparent'
-    },
-    {
-        coordinates: [
-            {x: 50, y: 250},
-            {x: 50, y: 350},
-            {x: 150, y: 350}
-        ],
-        lineColor: 'yellow',
-        fillColor: 'black'
-    },
-    {
-        coordinates: [
-            {x: 250, y: 50},
-            {x: 370, y: 50},
-            {x: 370, y: 100}
-        ],
-        lineColor: 'yellow',
-        fillColor: 'black'
-    },
-    {
-        coordinates: [
-            {x: 270, y: 310},
-            {x: 270, y: 360},
-            {x: 230, y: 360}
-        ],
-        lineColor: 'yellow',
-        fillColor: 'black'
-    }
-];
 function drawGridAttribute(minor = 10, major = minor * 5, lineColor = '#00FF00', textColor = '#009900') {
-    console.log('drawing');
-    const asteroids = document.querySelector('#asteroids');
     const boardWidth = asteroids.clientWidth;
     const boardHeight = asteroids.clientHeight;
 
@@ -95,7 +55,6 @@ function drawGridAttribute(minor = 10, major = minor * 5, lineColor = '#00FF00',
 }
 
 function drawGrid(minor = 10, major = minor * 5, lineColor = '#00FF00', textColor = '#009900') {
-    const asteroids = document.querySelector('#asteroids');
     const boardWidth = asteroids.clientWidth;
     const boardHeight = asteroids.clientHeight;
 
@@ -172,7 +131,6 @@ function drawCoordinates(coordinates, color = 'white', fontSize = 8) {
 }
 
 function drawStraightShapes(shapes) {
-    const asteroids = document.querySelector('#asteroids');
     shapes.forEach((shape) => {
         asteroids.appendChild(drawPaths(shape.coordinates, true, shape.lineColor, shape.fillColor));
         if (shape.drawCoordinates != undefined) {
@@ -182,5 +140,8 @@ function drawStraightShapes(shapes) {
     });
 }
 
+function drawCurvedShapes() {}
+
 drawGrid();
 drawStraightShapes(shapes);
+drawCurvedShapes(shapes);
