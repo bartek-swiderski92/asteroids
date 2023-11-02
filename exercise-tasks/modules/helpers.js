@@ -179,12 +179,20 @@ svg_.drawCurvedShapes = function (shapes) {
 };
 
 svg_.drawCircledArc = function (shape) {
-    asteroids.innerHTML += `
+    // asteroids.innerHTML += `
+    //     <path
+    //         d="M${shape.x} ${shape.y}
+    //         l ${shape.cutDepth} ${shape.cutDepth * 0.75}
+    //         a ${shape.width / 2} ${shape.height / 2} -45 1 1 0 ${shape.cutDepth * -1.5}
+    //         z"
+    //         fill="${shape.fill}"
+    //     />`;
+    asteroids.innerHTML += ` 
         <path 
-            d="M${shape.x} ${shape.y}
-            l ${shape.cutDepth} ${shape.cutDepth * 0.75}
-            a ${shape.width / 2} ${shape.height / 2} 1 1 1 0 ${shape.cutDepth * -1.5}
-            z"
-            fill="${shape.fill}"
-        />`;
+            d="M 230 230
+            A 45 45, 0, 1, 1, 275 275
+            L 275 230 
+            Z" 
+            fill="blue"/>
+`;
 };
