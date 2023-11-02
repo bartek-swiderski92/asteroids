@@ -41,7 +41,6 @@ svg_private.drawCoordinates = function (coordinates, color = 'white', fontSize =
     }
 };
 svg_.drawGrid = function (minor = 10, major = minor * 5, lineColor = '#00FF00', textColor = '#009900') {
-    console.log(asteroids);
     const boardWidth = asteroids.clientWidth;
     const boardHeight = asteroids.clientHeight;
 
@@ -177,4 +176,15 @@ svg_.drawCurvedShapes = function (shapes) {
             asteroids.innerHTML += svg_private.drawCoordinates(shape.coordinates, shape.fontColor);
         }
     });
+};
+
+svg_.drawCircledArc = function (shape) {
+    asteroids.innerHTML += `
+        <path 
+            d="M${shape.x} ${shape.y}
+            l ${shape.cutDepth} ${shape.cutDepth * 0.75}
+            a ${shape.width / 2} ${shape.height / 2} 1 1 1 0 ${shape.cutDepth * -1.5}
+            z"
+            fill="${shape.fill}"
+        />`;
 };
