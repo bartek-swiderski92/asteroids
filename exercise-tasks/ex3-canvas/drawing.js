@@ -34,3 +34,15 @@ function drawGrid(context, minor = 10, major = minor * 5, stroke = '#00FF00', fi
 
     context.restore();
 }
+
+function drawPacman(context, x, y, radius, mouthPosition) {
+    context.strokeStyle = 'black';
+    context.lineWidth = 2;
+    context.fillStyle = 'yellow';
+    context.beginPath();
+    context.arc(x, y, radius, mouthPosition * 0.2 * Math.PI, (2 - mouthPosition * 0.2) * Math.PI);
+    context.lineTo(x, y);
+    context.fill();
+    context.closePath();
+    context.stroke();
+}

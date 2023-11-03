@@ -8,7 +8,7 @@
             name="viewport"
             content="width=device-width, initial-scale=1.0"
         />
-        <title>Document</title>
+        <title>Pacman</title>
         <link
             rel="stylesheet"
             href="style.css"
@@ -26,13 +26,16 @@
             const canvas = document.getElementById('pac-man');
             const context = canvas.getContext('2d');
             drawGrid(context);
+            // drawPacman(context, 200, 200, 150, Math.random());
+            let minRadius = 5;
+            let maxRadius = 50;
 
-            context.fillStyle = 'yellow';
-            context.beginPath();
-            context.arc(200, 200, 150, 0.2 * Math.PI, 1.8 * Math.PI);
-            context.lineTo(200, 200);
-
-            context.fill();
+            do {
+                let x = context.canvas.width * Math.random();
+                let y = context.canvas.height * Math.random();
+                let radius = minRadius + (maxRadius - minRadius) * Math.random();
+                drawPacman(context, x, y, radius, Math.random());
+            } while (Math.random() < 0.9);
         </script>
     </body>
 </html>
