@@ -1,9 +1,7 @@
 /** @format */
 
-export const svg_ = {};
-export const canvas_ = {};
+const svg_ = {};
 const svg_private = {};
-const canvas_private = {};
 
 svg_private.drawCurves = function (coordinates, closed = true, color = 'white', fill = 'transparent', strokeWidth = '2') {
     if (Array.isArray(coordinates) === true && coordinates.length > 1) {
@@ -200,7 +198,7 @@ svg_.animatePacman = function (pacman, growValue) {
     let {x, y, radius} = pacman;
     let mouthAngle = 1;
     let mouthIncrease = true;
-    
+
     setInterval(() => {
         let pacmanEl = document.querySelector('#pacman');
 
@@ -227,3 +225,7 @@ svg_.animatePacman = function (pacman, growValue) {
         }
     }, 12);
 };
+
+
+
+export default svg_;

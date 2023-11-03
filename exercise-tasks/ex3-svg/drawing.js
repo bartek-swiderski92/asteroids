@@ -1,5 +1,5 @@
 /** @format */
-import {svg_} from '../modules/helpers.js';
+import svg_ from '../modules/svg.js';
 
 const pacman = {
     x: 200,
