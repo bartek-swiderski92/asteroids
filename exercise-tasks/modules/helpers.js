@@ -178,21 +178,52 @@ svg_.drawCurvedShapes = function (shapes) {
     });
 };
 
-svg_.drawCircledArc = function (shape) {
-    // asteroids.innerHTML += `
-    //     <path
-    //         d="M${shape.x} ${shape.y}
-    //         l ${shape.cutDepth} ${shape.cutDepth * 0.75}
-    //         a ${shape.width / 2} ${shape.height / 2} -45 1 1 0 ${shape.cutDepth * -1.5}
-    //         z"
-    //         fill="${shape.fill}"
-    //     />`;
-    asteroids.innerHTML += ` 
-        <path 
-            d="M 230 230
-            A 45 45, 0, 1, 1, 275 275
-            L 275 230 
-            Z" 
-            fill="blue"/>
-`;
+svg_.drawPacman = function (pacman) {
+    const {x, y, radius, mouthAngle, fill} = pacman;
+    const radians = (mouthAngle * (Math.PI / 180)) / 2;
+    const mouthX = Math.cos(radians) * radius;
+    const mouthY = Math.sin(radians) * radius;
+
+    let dAttribute = `M${x} ${y}
+    l ${mouthX} ${mouthY}
+    a ${radius} ${radius} 1 1 1 0 ${mouthY * -2}
+    z`;
+    let outputElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    outputElement.setAttribute('id', 'pacman');
+    outputElement.setAttribute('fill', fill);
+
+    outputElement.setAttribute('d', dAttribute);
+    asteroids.appendChild(outputElement);
+};
+
+svg_.animatePacman = function (pacman, growValue) {
+    let {x, y, radius} = pacman;
+    let mouthAngle = 1;
+    let mouthIncrease = true;
+    
+    setInterval(() => {
+        let pacmanEl = document.querySelector('#pacman');
+
+        if (pacmanEl != undefined) {
+            if (mouthIncrease && mouthAngle < 80) {
+                mouthAngle += growValue;
+            } else if (mouthAngle >= 2) {
+                mouthIncrease = false;
+                mouthAngle -= growValue;
+            } else {
+                mouthIncrease = true;
+            }
+            const radians = (mouthAngle * (Math.PI / 180)) / 2;
+            const mouthX = Math.cos(radians) * radius;
+            const mouthY = Math.sin(radians) * radius;
+
+            let dAttribute = `M${x} ${y}
+            l ${mouthX} ${mouthY}
+            a ${radius} ${radius} 1 1 1 0 ${mouthY * -2}
+            z`;
+            pacmanEl.setAttribute('d', dAttribute);
+        } else {
+            svg_.drawPacman(pacman);
+        }
+    }, 12);
 };
