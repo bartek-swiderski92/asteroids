@@ -58,7 +58,7 @@ for (c1 = 0.1; c1 < 1; c1 += 0.2) {
         context.save();
         context.translate(context.canvas.width * c1, context.canvas.height * c2);
         context.rotate(-Math.PI / 2);
-        canvas_.drawShip(context, context.canvas.width / 12, {curve1: c1, curve2: c2, guide: true});
+        canvas_.drawShip(context, context.canvas.width / 12, {curve1: c1, curve2: c2, guide: false});
         context.restore();
     }
 }
