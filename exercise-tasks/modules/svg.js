@@ -226,6 +226,4 @@ svg_.animatePacman = function (pacman, growValue) {
     }, 12);
 };
 
-
-
 export default svg_;
