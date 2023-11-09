@@ -66,19 +66,19 @@ svg_.drawPath = function (asteroids, coordinates, lineWidth, stroke, fill, close
     }
 };
 
-svg_.drawCircle = function (asteroids, radius, fill = 'rgba(0, 0, 0, 0.405)', stroke = 'white', strokeWidth = '0.5px') {
+svg_.drawCircle = function (asteroids, x, y, radius, fill = 'rgba(0, 0, 0, 0.405)', stroke = 'white', strokeWidth = '0.5px') {
     let circleEl = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     circleEl.setAttribute('fill', fill);
     circleEl.setAttribute('stroke', stroke);
     circleEl.setAttribute('stroke-width', strokeWidth);
-    circleEl.setAttribute('cx', 0);
-    circleEl.setAttribute('cy', 0);
+    circleEl.setAttribute('cx', x);
+    circleEl.setAttribute('cy', y);
     circleEl.setAttribute('r', radius);
 
     asteroids.appendChild(circleEl);
 };
 
-svg_.drawShip = function (asteroids, radius, options = {}) {
+svg_.drawShip = function (asteroids, x, y, radius, options = {}) {
     //defaults:
     let lineWidth = options.lineWidth || 0.5;
     let stroke = options.stroke || 'white';
@@ -86,21 +86,21 @@ svg_.drawShip = function (asteroids, radius, options = {}) {
     let angle = (options.angle || 0.5 * Math.PI) / 2;
     let coordinates = [
         {
-            x: radius,
-            y: 0
+            x: x + radius,
+            y: y
         },
         {
-            x: Math.cos(Math.PI - angle) * radius,
-            y: Math.sin(Math.PI - angle) * radius
+            x: x + Math.cos(Math.PI - angle) * radius,
+            y: y + Math.sin(Math.PI - angle) * radius
         },
         {
-            x: Math.cos(Math.PI + angle) * radius,
-            y: Math.sin(Math.PI + angle) * radius
+            x: x + Math.cos(Math.PI + angle) * radius,
+            y: y + Math.sin(Math.PI + angle) * radius
         }
     ];
 
     if (options.guide) {
-        svg_.drawCircle(asteroids, radius);
+        svg_.drawCircle(asteroids, x, y, radius);
     }
     svg_.drawPath(asteroids, coordinates, lineWidth, stroke, fill, true);
 };
