@@ -113,8 +113,8 @@ svg_.drawShip = function (asteroids, x, y, radius, options = {}) {
         {
             x: x + radius,
             y: y,
-            quadraticCurveX: 15,
-            quadraticCurveY: 20
+            quadraticCurveX: 0,
+            quadraticCurveY: 0
         },
         {
             x: x + Math.cos(Math.PI - angle) * radius,

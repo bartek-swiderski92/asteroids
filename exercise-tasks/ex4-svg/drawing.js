@@ -11,7 +11,7 @@ svg_.drawGrid(asteroids);
 
 // let path = document.querySelector('path');
 // path.style.display = 'none';
-svg_.drawShip(asteroids, 20, 20, 15, {guide: true, rotate: 0.8});
+svg_.drawShip(asteroids, 200, 200, 150, {guide: true, rotate: 0.8});
 
 // transforming ships across the grid
 // let rotateValue = 0;
