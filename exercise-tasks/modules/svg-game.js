@@ -91,7 +91,7 @@ svg_.drawCurvedPath = function (asteroids, coordinates, strokeWidth, stroke, fil
     }
 };
 
-svg_.drawCircle = function (asteroids, x, y, radius, fill = 'rgba(0, 0, 0, 0.405)', stroke = 'white', strokeWidth = '0.5px') {
+svg_.drawCircle = function (asteroids, x, y, radius, curve, fill = 'rgba(0, 0, 0, 0.405)', stroke = 'white', strokeWidth = '0.5px') {
     let circleEl = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     circleEl.setAttribute('fill', fill);
     circleEl.setAttribute('stroke', stroke);
@@ -103,22 +103,37 @@ svg_.drawCircle = function (asteroids, x, y, radius, fill = 'rgba(0, 0, 0, 0.405
     asteroids.appendChild(circleEl);
 };
 
+svg_.drawGuide = function (asteroids, x, y, radius, curve) {
+    let pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
+    let dAttribute = '';
+    pathEl.setAttribute('fill', 'white');
+    pathEl.setAttribute('stroke', 'white');
+    pathEl.setAttribute('stroke-width', '0.5px');
+    dAttribute = `M ${x} ${y} ${x - radius} ${y}`;
+    pathEl.setAttribute('d', dAttribute);
+
+    svg_.drawCircle(asteroids, radius * curve, y, Math.PI);
+    asteroids.appendChild(pathEl);
+};
+
 svg_.drawShip = function (asteroids, x, y, radius, options = {}) {
     //defaults:
     let lineWidth = options.lineWidth || 0.5;
     let stroke = options.stroke || 'white';
     let fill = options.fill || 'black';
     let angle = (options.angle || 0.5 * Math.PI) / 2;
+    let curve = options.curve || 0.5;
     let coordinates = [
         {
             x: x + radius,
-            y: y,
-            quadraticCurveX: 0,
-            quadraticCurveY: 0
+            y: y
         },
         {
             x: x + Math.cos(Math.PI - angle) * radius,
-            y: y + Math.sin(Math.PI - angle) * radius
+            y: y + Math.sin(Math.PI - angle) * radius,
+            quadraticCurveX: radius * curve,
+            quadraticCurveY: 200
         },
         {
             x: x + Math.cos(Math.PI + angle) * radius,
@@ -126,10 +141,11 @@ svg_.drawShip = function (asteroids, x, y, radius, options = {}) {
         }
     ];
 
-    if (options.guide) {
-        svg_.drawCircle(asteroids, x, y, radius);
-    }
     svg_.drawCurvedPath(asteroids, coordinates, lineWidth, stroke, fill, true);
+    if (options.guide) {
+        svg_.drawCircle(asteroids, x, y, radius, curve);
+        svg_.drawGuide(asteroids, x, y, radius, curve);
+    }
 };
 
 export default svg_;
