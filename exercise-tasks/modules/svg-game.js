@@ -41,7 +41,6 @@ svg_.drawLine = function (asteroids, x1, y1, x2, y2, lineWidth, stroke, fill) {
     lineEl.setAttribute('y2', y2);
     lineEl.setAttribute('stroke-width', lineWidth);
     lineEl.setAttribute('stroke', stroke);
-    // lineEl.setAttribute('y2', fill);
 
     asteroids.appendChild(lineEl);
 };
@@ -66,32 +65,27 @@ svg_.drawPath = function (asteroids, coordinates, strokeWidth, stroke, fill, clo
     }
 };
 
-svg_.drawCurvedPath = function (asteroids, coordinates, strokeWidth, stroke, fill, closed) {
-    if (Array.isArray(coordinates) === true && coordinates.length > 1) {
-        let dAttribute = '';
-        let outputElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        outputElement.setAttribute('fill', fill);
-        outputElement.setAttribute('stroke', stroke);
-        outputElement.setAttribute('stroke-width', strokeWidth);
+svg_.drawShipPaths = function (asteroids, position, radius, angle, curve, guide, strokeWidth, stroke, fill) {
+    let dAttribute = 'M ';
+    let outputElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    outputElement.setAttribute('class', 'ship');
+    outputElement.setAttribute('fill', fill);
+    outputElement.setAttribute('stroke', stroke);
+    outputElement.setAttribute('stroke-width', strokeWidth);
 
-        for (let i = 0; i < coordinates.length; i++) {
-            let {x, y, quadraticCurveX, quadraticCurveY, cubicCurveX1, cubicCurveY1, cubicCurveX2, cubicCurveY2} = coordinates[i];
+    let firstPath = `${position + radius} ${position} ${position + Math.cos(Math.PI - angle) * radius} ${position + Math.sin(Math.PI - angle) * radius} `;
+    let secondPath = `Q ${position * curve} ${position} ${position + Math.cos(Math.PI + angle) * radius} ${position + Math.sin(Math.PI + angle) * radius} `;
+    let thirdPath = `L ${position + radius} ${position}`;
+    dAttribute += firstPath + secondPath + thirdPath;
+    outputElement.setAttribute('d', dAttribute);
+    asteroids.appendChild(outputElement);
 
-            dAttribute += i === 0 ? 'M ' : '';
-            dAttribute += `${x} ${y} `;
-            if (quadraticCurveX && quadraticCurveY) {
-                dAttribute += `Q ${quadraticCurveX} ${quadraticCurveY} `;
-            } else if (cubicCurveX1 && cubicCurveY1 && cubicCurveX2 && cubicCurveY2) {
-                dAttribute += `C ${cubicCurveX1} ${cubicCurveY1} ${cubicCurveX2} ${cubicCurveY2} `;
-            }
-        }
-        dAttribute += closed ? 'z' : '';
-        outputElement.setAttribute('d', dAttribute);
-        asteroids.appendChild(outputElement);
+    if (guide) {
+        svg_.drawGuide(asteroids, position, radius, curve);
     }
 };
 
-svg_.drawCircle = function (asteroids, x, y, radius, curve, fill = 'rgba(0, 0, 0, 0.405)', stroke = 'white', strokeWidth = '0.5px') {
+svg_.drawCircle = function (x, y, radius, curve, fill = 'rgba(0, 0, 0, 0.405)', stroke = 'white', strokeWidth = '0.5px') {
     let circleEl = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     circleEl.setAttribute('fill', fill);
     circleEl.setAttribute('stroke', stroke);
@@ -100,52 +94,49 @@ svg_.drawCircle = function (asteroids, x, y, radius, curve, fill = 'rgba(0, 0, 0
     circleEl.setAttribute('cy', y);
     circleEl.setAttribute('r', radius);
 
-    asteroids.appendChild(circleEl);
+    return circleEl;
 };
 
-svg_.drawGuide = function (asteroids, x, y, radius, curve) {
+svg_.drawGuide = function (asteroids, position, radius, curve) {
     let pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
     let dAttribute = '';
     pathEl.setAttribute('fill', 'white');
     pathEl.setAttribute('stroke', 'white');
     pathEl.setAttribute('stroke-width', '0.5px');
-    dAttribute = `M ${x} ${y} ${x - radius} ${y}`;
+    pathEl.setAttribute('class', 'guide-line');
+
+    dAttribute = `M ${position} ${position} ${position - radius} ${position}`;
     pathEl.setAttribute('d', dAttribute);
 
-    svg_.drawCircle(asteroids, radius * curve, y, Math.PI);
+    let guideLinePoint = svg_.drawCircle(position * curve - Math.PI, position, 0.02 * radius);
+    guideLinePoint.setAttribute('class', 'guide-line-point');
+
     asteroids.appendChild(pathEl);
+    asteroids.appendChild(guideLinePoint);
 };
 
-svg_.drawShip = function (asteroids, x, y, radius, options = {}) {
+svg_.drawShip = function (asteroids, position, radius, options = {}) {
     //defaults:
     let lineWidth = options.lineWidth || 0.5;
     let stroke = options.stroke || 'white';
     let fill = options.fill || 'black';
     let angle = (options.angle || 0.5 * Math.PI) / 2;
     let curve = options.curve || 0.5;
-    let coordinates = [
-        {
-            x: x + radius,
-            y: y
-        },
-        {
-            x: x + Math.cos(Math.PI - angle) * radius,
-            y: y + Math.sin(Math.PI - angle) * radius,
-            quadraticCurveX: radius * curve,
-            quadraticCurveY: 200
-        },
-        {
-            x: x + Math.cos(Math.PI + angle) * radius,
-            y: y + Math.sin(Math.PI + angle) * radius
-        }
-    ];
+    let guide = options.guide;
 
-    svg_.drawCurvedPath(asteroids, coordinates, lineWidth, stroke, fill, true);
-    if (options.guide) {
-        svg_.drawCircle(asteroids, x, y, radius, curve);
-        svg_.drawGuide(asteroids, x, y, radius, curve);
+    svg_.drawShipPaths(asteroids, position, radius, angle, curve, guide, lineWidth, stroke, fill);
+    if (guide) {
+        let guideCircle = svg_.drawCircle(position, position, radius, curve);
+        guideCircle.setAttribute('class', 'guide-circle');
+        asteroids.appendChild(guideCircle);
     }
+};
+
+svg_.rotateElement = function (asteroids, element, position, x, y, rotateValue) {
+    let clonedElement = element.cloneNode(true);
+    clonedElement.setAttribute('transform', `translate(${x}, ${y}) rotate(${rotateValue}, ${position}, ${position})`);
+    asteroids.appendChild(clonedElement);
 };
 
 export default svg_;

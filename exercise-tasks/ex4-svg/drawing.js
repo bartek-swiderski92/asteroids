@@ -11,21 +11,25 @@ svg_.drawGrid(asteroids);
 
 // let path = document.querySelector('path');
 // path.style.display = 'none';
-svg_.drawShip(asteroids, 200, 200, 150, {guide: true, rotate: 0.8, curve: 0.5});
 
-// transforming ships across the grid
+const position = 200;
+const radius = 150;
+
+svg_.drawShip(asteroids, position, radius, {guide: true, curve: Math.random()});
+
+// // transforming ships across the grid
+// const ogShip = document.querySelector('.ship');
+// const ogCircle = document.querySelector('.guide-circle');
+// const ogGuideLine = document.querySelector('.guide-line');
+// const ogGuidePoint = document.querySelector('.guide-line-point');
+// const svgObjects = [ogShip, ogCircle, ogGuideLine, ogGuidePoint];
 // let rotateValue = 0;
-// for (let y = 0; y < 400; y += 40) {
-//     for (let x = 0; x < 400; x += 40) {
+// for (let y = 0; y < 400; y += position * 2) {
+//     for (let x = 0; x < 400; x += position * 2) {
 //         if (y === 0 && x === 0) continue;
 //         rotateValue += 1.5;
-//         let ogShip = document.querySelector('path');
-//         let ogCircle = document.querySelector('circle');
-//         let clonedShip = ogShip.cloneNode(true);
-//         let clonedCircle = ogCircle.cloneNode(true);
-//         clonedShip.setAttribute('transform', `translate(${x}, ${y}) rotate(${rotateValue}, 20, 20)`);
-//         clonedCircle.setAttribute('transform', `translate(${x}, ${y})`);
-//         asteroids.appendChild(clonedShip);
-//         asteroids.appendChild(clonedCircle);
+//         svgObjects.forEach((element) => {
+//             svg_.rotateElement(asteroids, element, position, x, y, rotateValue);
+//         });
 //     }
 // }
