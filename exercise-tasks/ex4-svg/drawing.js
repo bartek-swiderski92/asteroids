@@ -15,7 +15,7 @@ svg_.drawGrid(asteroids);
 const position = 200;
 const radius = 150;
 
-svg_.drawShip(asteroids, position, radius, {guide: true, curve: Math.random()});
+svg_.drawShip(asteroids, position, radius, {guide: true, curve1: 0.25, curve2: 0.75});
 
 // // transforming ships across the grid
 // const ogShip = document.querySelector('.ship');
