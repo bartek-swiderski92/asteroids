@@ -66,16 +66,37 @@ svg_.drawPath = function (asteroids, coordinates, strokeWidth, stroke, fill, clo
 };
 
 svg_.drawShipPaths = function (asteroids, position, radius, angle, curve1, curve2, guide, strokeWidth, stroke, fill) {
-    let dAttribute = `M ${position + radius} ${position} `;
+    const coordinates = [
+        {posX: position + radius, posY: position},
+        {
+            curveX: Math.cos(angle) * radius * curve2 + position,
+            curveY: Math.sin(angle) * radius * curve2 + position,
+            posX: position + Math.cos(Math.PI - angle) * radius,
+            posY: position + Math.sin(Math.PI - angle) * radius
+        },
+        {
+            curveX: position * curve1,
+            curveY: position,
+            posX: position + Math.cos(Math.PI + angle) * radius,
+            posY: position + Math.sin(Math.PI + angle) * radius
+        },
+        {
+            curveX: Math.cos(-angle) * radius * curve2 + position,
+            curveY: Math.sin(-angle) * radius * curve2 + position,
+            posX: position + radius,
+            posY: position
+        }
+    ];
+    let dAttribute = `M ${coordinates[0].posX} ${coordinates[0].posY} `;
     let outputElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     outputElement.setAttribute('class', 'ship');
     outputElement.setAttribute('fill', fill);
     outputElement.setAttribute('stroke', stroke);
     outputElement.setAttribute('stroke-width', strokeWidth);
 
-    let firstPath = `Q ${Math.cos(angle) * radius * curve2 + position} ${Math.sin(angle) * radius * curve2 + position} ${position + Math.cos(Math.PI - angle) * radius} ${position + Math.sin(Math.PI - angle) * radius} `;
-    let secondPath = `Q ${position * curve1} ${position} ${position + Math.cos(Math.PI + angle) * radius} ${position + Math.sin(Math.PI + angle) * radius} `;
-    let thirdPath = `Q ${Math.cos(-angle) * radius * curve2 + position} ${Math.sin(-angle) * radius * curve2 + position} ${position + radius} ${position}`;
+    let firstPath = `Q ${coordinates[1].curveX}, ${coordinates[1].curveY} ${coordinates[1].posX} ${coordinates[1].posY}`;
+    let secondPath = `Q ${coordinates[2].curveX}, ${coordinates[2].curveY} ${coordinates[2].posX} ${coordinates[2].posY}`;
+    let thirdPath = `Q ${coordinates[3].curveX}, ${coordinates[3].curveY} ${coordinates[3].posX} ${coordinates[3].posY}`;
     dAttribute += firstPath + secondPath + thirdPath;
     outputElement.setAttribute('d', dAttribute);
     asteroids.appendChild(outputElement);
