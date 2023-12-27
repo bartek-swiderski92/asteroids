@@ -46,19 +46,44 @@ svg_.drawLine = function (asteroids, x1, y1, x2, y2, lineWidth, stroke, fill) {
     asteroids.appendChild(lineEl);
 };
 
-svg_.drawPath = function (asteroids, coordinates, lineWidth, stroke, fill, closed) {
+svg_.drawPath = function (asteroids, coordinates, strokeWidth, stroke, fill, closed) {
     if (Array.isArray(coordinates) === true && coordinates.length > 1) {
         let dAttribute = '';
         let outputElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         outputElement.setAttribute('fill', fill);
         outputElement.setAttribute('stroke', stroke);
-        outputElement.setAttribute('stroke-width', lineWidth);
+        outputElement.setAttribute('stroke-width', strokeWidth);
 
         for (let i = 0; i < coordinates.length; i++) {
             const {x, y} = coordinates[i];
 
             dAttribute += i === 0 ? 'M ' : 'L ';
             dAttribute += `${x} ${y}, `;
+        }
+        dAttribute += closed ? 'z' : '';
+        outputElement.setAttribute('d', dAttribute);
+        asteroids.appendChild(outputElement);
+    }
+};
+
+svg_.drawCurvedPath = function (asteroids, coordinates, strokeWidth, stroke, fill, closed) {
+    if (Array.isArray(coordinates) === true && coordinates.length > 1) {
+        let dAttribute = '';
+        let outputElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        outputElement.setAttribute('fill', fill);
+        outputElement.setAttribute('stroke', stroke);
+        outputElement.setAttribute('stroke-width', strokeWidth);
+
+        for (let i = 0; i < coordinates.length; i++) {
+            let {x, y, quadraticCurveX, quadraticCurveY, cubicCurveX1, cubicCurveY1, cubicCurveX2, cubicCurveY2} = coordinates[i];
+
+            dAttribute += i === 0 ? 'M ' : '';
+            dAttribute += `${x} ${y} `;
+            if (quadraticCurveX && quadraticCurveY) {
+                dAttribute += `Q ${quadraticCurveX} ${quadraticCurveY} `;
+            } else if (cubicCurveX1 && cubicCurveY1 && cubicCurveX2 && cubicCurveY2) {
+                dAttribute += `C ${cubicCurveX1} ${cubicCurveY1} ${cubicCurveX2} ${cubicCurveY2} `;
+            }
         }
         dAttribute += closed ? 'z' : '';
         outputElement.setAttribute('d', dAttribute);
@@ -87,7 +112,9 @@ svg_.drawShip = function (asteroids, x, y, radius, options = {}) {
     let coordinates = [
         {
             x: x + radius,
-            y: y
+            y: y,
+            quadraticCurveX: 15,
+            quadraticCurveY: 20
         },
         {
             x: x + Math.cos(Math.PI - angle) * radius,
@@ -102,7 +129,7 @@ svg_.drawShip = function (asteroids, x, y, radius, options = {}) {
     if (options.guide) {
         svg_.drawCircle(asteroids, x, y, radius);
     }
-    svg_.drawPath(asteroids, coordinates, lineWidth, stroke, fill, true);
+    svg_.drawCurvedPath(asteroids, coordinates, lineWidth, stroke, fill, true);
 };
 
 export default svg_;
