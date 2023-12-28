@@ -22,7 +22,8 @@ svg_.drawShip(asteroids, position, radius, {guide: true, curve1: 0.25, curve2: 0
 // const ogCircle = document.querySelector('.guide-circle');
 // const ogGuideLine = document.querySelector('.guide-line');
 // const ogGuidePoint = document.querySelector('.guide-line-point');
-// const svgObjects = [ogShip, ogCircle, ogGuideLine, ogGuidePoint];
+// const svgObjects = [ogShip, ogCircle];
+// // const svgObjects = [ogShip, ogCircle, ogGuideLine, ogGuidePoint];
 // let rotateValue = 0;
 // for (let y = 0; y < 400; y += position * 2) {
 //     for (let x = 0; x < 400; x += position * 2) {

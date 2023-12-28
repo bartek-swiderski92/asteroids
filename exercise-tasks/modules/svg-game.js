@@ -65,45 +65,75 @@ svg_.drawPath = function (asteroids, coordinates, strokeWidth, stroke, fill, clo
     }
 };
 
-svg_.drawShipPaths = function (asteroids, position, radius, angle, curve1, curve2, guide, strokeWidth, stroke, fill) {
-    const coordinates = [
-        {posX: position + radius, posY: position},
-        {
-            curveX: Math.cos(angle) * radius * curve2 + position,
-            curveY: Math.sin(angle) * radius * curve2 + position,
-            posX: position + Math.cos(Math.PI - angle) * radius,
-            posY: position + Math.sin(Math.PI - angle) * radius
-        },
-        {
-            curveX: position * curve1,
-            curveY: position,
-            posX: position + Math.cos(Math.PI + angle) * radius,
-            posY: position + Math.sin(Math.PI + angle) * radius
-        },
-        {
-            curveX: Math.cos(-angle) * radius * curve2 + position,
-            curveY: Math.sin(-angle) * radius * curve2 + position,
-            posX: position + radius,
-            posY: position
-        }
-    ];
-    let dAttribute = `M ${coordinates[0].posX} ${coordinates[0].posY} `;
-    let outputElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    outputElement.setAttribute('class', 'ship');
-    outputElement.setAttribute('fill', fill);
-    outputElement.setAttribute('stroke', stroke);
-    outputElement.setAttribute('stroke-width', strokeWidth);
+svg_private.buildCoordinatesObject = function (position, radius, angle, curve1, curve2) {
+    return {
+        startingPoint: {posX: position + radius, posY: position},
+        waypoints: [
+            {
+                curveX: Math.cos(angle) * radius * curve2 + position,
+                curveY: Math.sin(angle) * radius * curve2 + position,
+                posX: position + Math.cos(Math.PI - angle) * radius,
+                posY: position + Math.sin(Math.PI - angle) * radius
+            },
+            {
+                curveX: position * curve1,
+                curveY: position,
+                posX: position + Math.cos(Math.PI + angle) * radius,
+                posY: position + Math.sin(Math.PI + angle) * radius
+            },
+            {
+                curveX: Math.cos(-angle) * radius * curve2 + position,
+                curveY: Math.sin(-angle) * radius * curve2 + position,
+                posX: position + radius,
+                posY: position
+            }
+        ],
+        guidelines: [
+            {x1: position, y1: position, x2: position + Math.cos(angle) * radius, y2: position + Math.sin(angle) * radius, circleX: Math.cos(angle) * radius * curve2 + position, circleY: Math.sin(angle) * radius * curve2 + position, pointRadius: 0.02 * radius},
+            {x1: position, y1: position, x2: position - radius, y2: position, circleX: position - radius, circleY: position, pointRadius: 0.02 * radius},
+            {x1: position, y1: position, x2: position + Math.cos(angle) * radius, y2: position - Math.sin(angle) * radius, circleX: Math.cos(-angle) * radius * curve2 + position, circleY: Math.sin(-angle) * radius * curve2 + position, pointRadius: 0.02 * radius}
+        ]
+    };
+};
 
-    let firstPath = `Q ${coordinates[1].curveX}, ${coordinates[1].curveY} ${coordinates[1].posX} ${coordinates[1].posY}`;
-    let secondPath = `Q ${coordinates[2].curveX}, ${coordinates[2].curveY} ${coordinates[2].posX} ${coordinates[2].posY}`;
-    let thirdPath = `Q ${coordinates[3].curveX}, ${coordinates[3].curveY} ${coordinates[3].posX} ${coordinates[3].posY}`;
-    dAttribute += firstPath + secondPath + thirdPath;
+svg_private.buildDAttributeForShip = function (coordinates) {
+    let dAttribute = `M ${coordinates.startingPoint.posX} ${coordinates.startingPoint.posY}`;
+
+    coordinates.waypoints.forEach((waypoint) => {
+        dAttribute += `Q ${waypoint.curveX} ${waypoint.curveY} ${waypoint.posX} ${waypoint.posY}`;
+    });
+    coordinates.guidelines.forEach((guideline) => {
+        console.log(guideline);
+        dAttribute += `M ${guideline.x1} ${guideline.y1} L ${guideline.x2} ${guideline.y2} M ${guideline.circleX - guideline.pointRadius} ${guideline.circleY} a${guideline.pointRadius} ${guideline.pointRadius} 0 1,0 ${guideline.pointRadius * 2},0 a ${guideline.pointRadius} ${
+            guideline.pointRadius
+        } 0 1,0 ${-guideline.pointRadius * 2},0`;
+        console.log(dAttribute);
+    });
+
+    return dAttribute;
+};
+
+svg_private.setBasicAttributes = function (elementType, className, strokeWidth, stroke, fill) {
+    let element = document.createElementNS('http://www.w3.org/2000/svg', elementType);
+    element.setAttribute('class', className);
+    element.setAttribute('fill', fill);
+    element.setAttribute('stroke', stroke);
+    element.setAttribute('stroke-width', strokeWidth);
+    return element;
+};
+
+svg_.drawShipPaths = function (asteroids, position, radius, angle, curve1, curve2, guide, strokeWidth, stroke, fill) {
+    const coordinates = svg_private.buildCoordinatesObject(position, radius, angle, curve1, curve2);
+    const dAttribute = svg_private.buildDAttributeForShip(coordinates);
+
+    const outputElement = svg_private.setBasicAttributes('path', 'ship', strokeWidth, stroke, fill);
+
     outputElement.setAttribute('d', dAttribute);
     asteroids.appendChild(outputElement);
 
-    if (guide) {
-        svg_.drawGuide(asteroids, position, radius, curve1);
-    }
+    // if (guide) {
+    //     svg_.drawGuide(asteroids, position, radius, curve1);
+    // }
 };
 
 svg_.drawCircle = function (x, y, radius, curve1, fill = 'rgba(0, 0, 0, 0.405)', stroke = 'white', strokeWidth = '0.5px') {
