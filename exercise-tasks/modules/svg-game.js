@@ -90,7 +90,7 @@ svg_private.buildCoordinatesObject = function (position, radius, angle, curve1, 
         ],
         guidelines: [
             {x1: position, y1: position, x2: position + Math.cos(angle) * radius, y2: position + Math.sin(angle) * radius, circleX: Math.cos(angle) * radius * curve2 + position, circleY: Math.sin(angle) * radius * curve2 + position, pointRadius: 0.02 * radius},
-            {x1: position, y1: position, x2: position - radius, y2: position, circleX: position - radius, circleY: position, pointRadius: 0.02 * radius},
+            {x1: position, y1: position, x2: position - radius, y2: position, circleX: position * curve1, circleY: position, pointRadius: 0.02 * radius},
             {x1: position, y1: position, x2: position + Math.cos(angle) * radius, y2: position - Math.sin(angle) * radius, circleX: Math.cos(-angle) * radius * curve2 + position, circleY: Math.sin(-angle) * radius * curve2 + position, pointRadius: 0.02 * radius}
         ]
     };
