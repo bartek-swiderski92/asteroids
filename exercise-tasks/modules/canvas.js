@@ -106,16 +106,25 @@ canvas_.drawAsteroid = function (ctx, radius, segments, options) {
     ctx.beginPath();
     for (let i = 0; i < segments; i++) {
         ctx.rotate((2 * Math.PI) / segments);
-        ctx.lineTo(radius, 0);
+        // strict shapes
+        // ctx.lineTo(radius, 0);
+        // total random
+        // ctx.lineTo(radius * Math.random(), 0);
+        // controllable random
+        // ctx.lineTo(radius * 0.8 + radius * 0.4 * Math.random(), 0);
+        // Configurable random
+        ctx.lineTo(radius + radius * options.noise * (Math.random() - 0.5), 0);
     }
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
 
     if (options.guide) {
-        ctx.lineWIdth = 0.5;
+        ctx.lineWidth = 0.3;
         ctx.beginPath();
+        ctx.arc(0, 0, radius + radius * options.noise * 0.5, 0, 2 * Math.PI);
         ctx.arc(0, 0, radius, 0, 2 * Math.PI);
+        ctx.arc(0, 0, radius - radius * options.noise * 0.5, 0, 2 * Math.PI);
         ctx.stroke();
     }
     ctx.restore();
