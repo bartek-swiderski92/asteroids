@@ -70,45 +70,48 @@ svg_private.buildCoordinatesObject = function (position, radius, angle, curve1, 
         startingPoint: {posX: position + radius, posY: position},
         waypoints: [
             {
-                curveX: Math.cos(angle) * radius * curve2 + position,
-                curveY: Math.sin(angle) * radius * curve2 + position,
+                controlPointX: Math.cos(angle) * radius * curve2 + position,
+                controlPointY: Math.sin(angle) * radius * curve2 + position,
                 posX: position + Math.cos(Math.PI - angle) * radius,
-                posY: position + Math.sin(Math.PI - angle) * radius
+                posY: position + Math.sin(Math.PI - angle) * radius,
+                guidelineX: position + Math.cos(angle) * radius,
+                guidelineY: position + Math.sin(angle) * radius
             },
             {
-                curveX: position * curve1,
-                curveY: position,
+                controlPointX: position * curve1,
+                controlPointY: position,
                 posX: position + Math.cos(Math.PI + angle) * radius,
-                posY: position + Math.sin(Math.PI + angle) * radius
+                posY: position + Math.sin(Math.PI + angle) * radius,
+                guidelineX: position - radius,
+                guidelineY: position
             },
             {
-                curveX: Math.cos(-angle) * radius * curve2 + position,
-                curveY: Math.sin(-angle) * radius * curve2 + position,
+                controlPointX: Math.cos(-angle) * radius * curve2 + position,
+                controlPointY: Math.sin(-angle) * radius * curve2 + position,
                 posX: position + radius,
-                posY: position
+                posY: position,
+                guidelineX: position + Math.cos(angle) * radius,
+                guidelineY: position - Math.sin(angle) * radius
             }
-        ],
-        guidelines: [
-            {x1: position, y1: position, x2: position + Math.cos(angle) * radius, y2: position + Math.sin(angle) * radius, circleX: Math.cos(angle) * radius * curve2 + position, circleY: Math.sin(angle) * radius * curve2 + position, pointRadius: 0.02 * radius},
-            {x1: position, y1: position, x2: position - radius, y2: position, circleX: position * curve1, circleY: position, pointRadius: 0.02 * radius},
-            {x1: position, y1: position, x2: position + Math.cos(angle) * radius, y2: position - Math.sin(angle) * radius, circleX: Math.cos(-angle) * radius * curve2 + position, circleY: Math.sin(-angle) * radius * curve2 + position, pointRadius: 0.02 * radius}
         ]
     };
 };
 
-svg_private.buildDAttributeForShip = function (coordinates, guide) {
+svg_private.buildDAttributeForShip = function (position, coordinates, guide, radius) {
     let dAttribute = `M ${coordinates.startingPoint.posX} ${coordinates.startingPoint.posY}`;
     coordinates.waypoints.forEach((waypoint) => {
-        dAttribute += `Q ${waypoint.curveX} ${waypoint.curveY} ${waypoint.posX} ${waypoint.posY}`;
+        let {controlPointX, controlPointY, posX, posY} = waypoint;
+        dAttribute += `Q ${controlPointX} ${controlPointY} ${posX} ${posY}`;
     });
     if (guide) {
-        coordinates.guidelines.forEach((guideline) => {
-            dAttribute += `M ${guideline.x1} ${guideline.y1} L ${guideline.x2} ${guideline.y2} M ${guideline.circleX - guideline.pointRadius} ${guideline.circleY} a${guideline.pointRadius} ${guideline.pointRadius} 0 1,0 ${guideline.pointRadius * 2},0 a ${guideline.pointRadius} ${
-                guideline.pointRadius
-            } 0 1,0 ${-guideline.pointRadius * 2},0`;
+        const pointRadius = 0.02 * radius;
+        coordinates.waypoints.forEach((waypoint) => {
+            let {guidelineX, guidelineY, controlPointX, controlPointY} = waypoint;
+            if (waypoint.guidelineX) {
+                dAttribute += `M ${position} ${position} L ${guidelineX} ${guidelineY} M ${controlPointX - pointRadius} ${controlPointY} a ${pointRadius} ${pointRadius} 0 1 0 ${pointRadius * 2} 0 a ${pointRadius} ${pointRadius} 0 1 0 ${-pointRadius * 2} 0`;
+            }
         });
     }
-
     return dAttribute;
 };
 
@@ -123,7 +126,7 @@ svg_private.setBasicAttributes = function (elementType, className, fill, stroke,
 
 svg_.drawShipPaths = function (asteroids, position, radius, angle, curve1, curve2, guide, strokeWidth, stroke, fill) {
     const coordinates = svg_private.buildCoordinatesObject(position, radius, angle, curve1, curve2);
-    const dAttribute = svg_private.buildDAttributeForShip(coordinates, guide);
+    const dAttribute = svg_private.buildDAttributeForShip(position, coordinates, guide, radius);
 
     const outputElement = svg_private.setBasicAttributes('path', 'ship', fill, stroke, strokeWidth);
 
