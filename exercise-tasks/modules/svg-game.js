@@ -78,7 +78,7 @@ svg_private.buildCoordinatesObject = function (position, radius, angle, curve1, 
                 guidelineY: position + Math.sin(angle) * radius
             },
             {
-                controlPointX: position * curve1,
+                controlPointX: -radius * curve1 + position,
                 controlPointY: position,
                 posX: position + Math.cos(Math.PI + angle) * radius,
                 posY: position + Math.sin(Math.PI + angle) * radius,
