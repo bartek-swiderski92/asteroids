@@ -123,7 +123,11 @@ canvas_.drawAsteroid = function (ctx, radius, segments, options) {
         ctx.lineWidth = 0.3;
         ctx.beginPath();
         ctx.arc(0, 0, radius + radius * options.noise * 0.5, 0, 2 * Math.PI);
+        ctx.closePath();
+        ctx.stroke();
         ctx.arc(0, 0, radius, 0, 2 * Math.PI);
+        ctx.closePath();
+        ctx.stroke();
         ctx.arc(0, 0, radius - radius * options.noise * 0.5, 0, 2 * Math.PI);
         ctx.stroke();
     }
