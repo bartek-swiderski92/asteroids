@@ -166,4 +166,12 @@ svg_.rotateElement = function (asteroids, element, position, x, y, rotateValue) 
     asteroids.appendChild(clonedElement);
 };
 
+svg_.drawAsteroid = function (asteroids, radius, segment, options = {}) {
+    //defaults:
+    let lineWidth = options.lineWidth || 0.5;
+    let stroke = options.stroke || 'white';
+    let fill = options.fill || 'black';
+    let guide = options.guide;
+};
+
 export default svg_;
