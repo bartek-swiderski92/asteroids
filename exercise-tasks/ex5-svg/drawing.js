@@ -15,15 +15,15 @@ svg_.drawGrid(asteroids);
 // let y = 50;
 // svg_.drawAsteroid(asteroids, x, y, radius, segments, {guide: true});
 
-let startX = 50;
-let startY = 50;
-let startRadius = 45;
+let startX = 100;
+let startY = 100;
+let startRadius = 80;
 let segmentsL = 12;
-// let noise = 0.75;
+let noise = 0.6;
 
-for (let y = startX; y < 450; y += startX * 2) {
-    for (let x = startY; x < 450; x += startY * 2) {
-        svg_.drawAsteroid(asteroids, x, y, startRadius, segmentsL, {guide: true});
+for (let y = startX; y < 400; y += startX * 2) {
+    for (let x = startY; x < 400; x += startY * 2) {
+        svg_.drawAsteroid(asteroids, x, y, startRadius, segmentsL, {noise: noise, guide: true});
         // segmentsL += 1;
     }
 }

@@ -170,30 +170,30 @@ svg_.drawAsteroid = function (asteroids, x, y, radius, segments, options = {}) {
     let noise = options.noise ?? 0.75;
 
     if (guide) {
-        let guideCircle = svg_.drawCircle(x, y, radius);
+        const guideCircle = svg_.drawCircle(x, y, radius);
         asteroids.appendChild(guideCircle);
     }
 
-    const asteroidsElement = svg_private.crateAsteroidsElement(asteroids, x, y, radius, segments, lineWidth, stroke, fill, noise);
+    const asteroidsElement = svg_private.crateAsteroidsElement(x, y, radius, segments, lineWidth, stroke, fill, noise);
 
     asteroids.appendChild(asteroidsElement);
 };
 
-svg_private.crateAsteroidsElement = function (asteroids, x, y, radius, segments, lineWidth, stroke, fill, noise) {
-    const dAttribute = svg_private.buildAsteroidCoordinatesString(x, y, radius, segments, noise);
+svg_private.crateAsteroidsElement = function (x, y, radius, segments, lineWidth, stroke, fill, noise) {
+    const dAttribute = svg_private.buildAsteroidCoordinatesString(radius, segments, noise);
     const pathElement = svg_private.setBasicAttributes('path', 'asteroid', fill, stroke, lineWidth);
     pathElement.setAttribute('d', dAttribute);
-    pathElement.style.transform = `translate(${x - radius}px, ${y - radius}px)`;
+    pathElement.style.transform = `translate(${x - radius * noise}px, ${y - radius * noise}px)`;
 
     return pathElement;
 };
 
-svg_private.buildAsteroidCoordinatesString = function (x, y, radius, segments, noise) {
+svg_private.buildAsteroidCoordinatesString = function (radius, segments, noise) {
     let coordinates = 'M';
     for (let i = 0; i < segments; i++) {
         const angle = (i / segments) * 2 * Math.PI;
-        const x1 = radius * Math.cos(angle) * ((Math.random() + 0.6) * noise) + radius;
-        const y1 = radius * Math.sin(angle) * ((Math.random() + 0.6) * noise) + radius;
+        const x1 = radius * Math.cos(angle) + radius * ((Math.random() + 0.6) * noise);
+        const y1 = radius * Math.sin(angle) + radius * ((Math.random() + 0.6) * noise);
         coordinates += `${x1}, ${y1} `;
     }
     coordinates += 'Z';
