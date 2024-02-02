@@ -97,12 +97,12 @@ svg_private.buildShipCoordinatesObject = function (position, radius, angle, curv
     };
 };
 
-svg_private.buildAsteroidCoordinatesString = function (x, y, radius, segments) {
+svg_private.buildAsteroidCoordinatesString = function (x, y, radius, segments, noise) {
     let coordinates = 'M';
     for (let i = 0; i < segments; i++) {
         const angle = (i / segments) * 2 * Math.PI;
-        const x1 = radius * Math.cos(angle) + radius;
-        const y1 = radius * Math.sin(angle) + radius;
+        const x1 = radius * Math.cos(angle) * ((Math.random() + 0.6) * noise) + radius;
+        const y1 = radius * Math.sin(angle) * ((Math.random() + 0.6) * noise) + radius;
         coordinates += `${x1}, ${y1} `;
     }
     coordinates += 'Z';
@@ -146,13 +146,15 @@ svg_private.drawShipPaths = function (asteroids, position, radius, angle, curve1
     console.log(outputElement);
     asteroids.appendChild(outputElement);
 };
-svg_private.crateAsteroidsElement = function (asteroids, x, y, radius, segments, lineWidth, stroke, fill) {
-    const dAttribute = svg_private.buildAsteroidCoordinatesString(x, y, radius, segments);
+svg_private.crateAsteroidsElement = function (asteroids, x, y, radius, segments, lineWidth, stroke, fill, noise) {
+    const dAttribute = svg_private.buildAsteroidCoordinatesString(x, y, radius, segments, noise);
     const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
     pathElement.setAttribute('d', dAttribute);
-    pathElement.setAttribute('stroke', 'black');
-    pathElement.setAttribute('fill', 'yellow');
+    pathElement.setAttribute('stroke', stroke);
+    pathElement.setAttribute('fill', fill);
+    pathElement.setAttribute('stroke-width', lineWidth);
+
     pathElement.style.transform = `translate(${x - radius}px, ${y - radius}px)`;
     return pathElement;
 };
@@ -191,17 +193,18 @@ svg_.rotateElement = function (asteroids, element, position, x, y, rotateValue) 
 
 svg_.drawAsteroid = function (asteroids, x, y, radius, segments, options = {}) {
     //defaults:
-    let lineWidth = options.lineWidth || 0.5;
-    let stroke = options.stroke || 'white';
-    let fill = options.fill || 'black';
+    let lineWidth = options.lineWidth ?? 1.75;
+    let stroke = options.stroke ?? 'white';
+    let fill = options.fill ?? 'black';
     let guide = options.guide;
+    let noise = options.noise ?? 0.75;
 
     if (guide) {
         let guideCircle = svg_.drawCircle(x, y, radius);
         asteroids.appendChild(guideCircle);
     }
 
-    const asteroidsElement = svg_private.crateAsteroidsElement(asteroids, x, y, radius, segments, lineWidth, stroke, fill);
+    const asteroidsElement = svg_private.crateAsteroidsElement(asteroids, x, y, radius, segments, lineWidth, stroke, fill, noise);
 
     asteroids.appendChild(asteroidsElement);
 };
