@@ -180,21 +180,25 @@ svg_.drawAsteroid = function (asteroids, x, y, radius, segments, options = {}) {
 };
 
 svg_private.crateAsteroidsElement = function (x, y, radius, segments, lineWidth, stroke, fill, noise) {
-    const dAttribute = svg_private.buildAsteroidCoordinatesString(radius, segments, noise);
+    const dAttribute = svg_private.buildAsteroidDAttribute(radius, segments, noise);
     const pathElement = svg_private.setBasicAttributes('path', 'asteroid', fill, stroke, lineWidth);
     pathElement.setAttribute('d', dAttribute);
-    pathElement.style.transform = `translate(${x - radius * noise}px, ${y - radius * noise}px)`;
+    pathElement.style.transform = `translate(${x}px, ${y}px)`;
 
     return pathElement;
 };
 
-svg_private.buildAsteroidCoordinatesString = function (radius, segments, noise) {
+svg_private.buildAsteroidDAttribute = function (radius, segments, noise) {
     let coordinates = 'M';
     for (let i = 0; i < segments; i++) {
+        const randomX = (Math.random() / 1.3) * noise;
+        const randomY = (Math.random() / 1.3) * noise;
         const angle = (i / segments) * 2 * Math.PI;
-        const x1 = radius * Math.cos(angle) + radius * ((Math.random() + 0.6) * noise);
-        const y1 = radius * Math.sin(angle) + radius * ((Math.random() + 0.6) * noise);
-        coordinates += `${x1}, ${y1} `;
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+        const x = radius * cos - radius * cos * randomX;
+        const y = radius * sin - radius * sin * randomY;
+        coordinates += `${x}, ${y} `;
     }
     coordinates += 'Z';
     return coordinates;
