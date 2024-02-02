@@ -49,13 +49,12 @@ svg_.drawGrid = function (asteroids, minor = 10, major = minor * 5, lineColor = 
 };
 
 svg_.drawLine = function (asteroids, x1, y1, x2, y2, lineWidth, stroke, fill) {
-    let lineEl = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    const lineEl = svg_private.setBasicAttributes('line', 'partial-line', fill, stroke, lineWidth);
+
     lineEl.setAttribute('x1', x1);
     lineEl.setAttribute('x2', x2);
     lineEl.setAttribute('y1', y1);
     lineEl.setAttribute('y2', y2);
-    lineEl.setAttribute('stroke-width', lineWidth);
-    lineEl.setAttribute('stroke', stroke);
 
     asteroids.appendChild(lineEl);
 };
@@ -63,11 +62,7 @@ svg_.drawLine = function (asteroids, x1, y1, x2, y2, lineWidth, stroke, fill) {
 svg_.drawPath = function (asteroids, coordinates, strokeWidth, stroke, fill, closed) {
     if (Array.isArray(coordinates) === true && coordinates.length > 1) {
         let dAttribute = '';
-        let outputElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        outputElement.setAttribute('fill', fill);
-        outputElement.setAttribute('stroke', stroke);
-        outputElement.setAttribute('stroke-width', strokeWidth);
-
+        const outputElement = svg_private.setBasicAttributes('path', 'partial-path', fill, stroke, strokeWidth);
         for (let i = 0; i < coordinates.length; i++) {
             const {x, y} = coordinates[i];
 
@@ -186,14 +181,10 @@ svg_.drawAsteroid = function (asteroids, x, y, radius, segments, options = {}) {
 
 svg_private.crateAsteroidsElement = function (asteroids, x, y, radius, segments, lineWidth, stroke, fill, noise) {
     const dAttribute = svg_private.buildAsteroidCoordinatesString(x, y, radius, segments, noise);
-    const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-
+    const pathElement = svg_private.setBasicAttributes('path', 'asteroid', fill, stroke, lineWidth);
     pathElement.setAttribute('d', dAttribute);
-    pathElement.setAttribute('stroke', stroke);
-    pathElement.setAttribute('fill', fill);
-    pathElement.setAttribute('stroke-width', lineWidth);
-
     pathElement.style.transform = `translate(${x - radius}px, ${y - radius}px)`;
+
     return pathElement;
 };
 
