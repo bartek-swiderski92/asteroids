@@ -65,7 +65,7 @@ svg_.drawPath = function (asteroids, coordinates, strokeWidth, stroke, fill, clo
     }
 };
 
-svg_private.buildCoordinatesObject = function (position, radius, angle, curve1, curve2) {
+svg_private.buildShipCoordinatesObject = function (position, radius, angle, curve1, curve2) {
     return {
         startingPoint: {posX: position + radius, posY: position},
         waypoints: [
@@ -97,6 +97,18 @@ svg_private.buildCoordinatesObject = function (position, radius, angle, curve1, 
     };
 };
 
+svg_private.buildAsteroidCoordinatesString = function (x, y, radius, segments) {
+    let coordinates = 'M';
+    for (let i = 0; i < segments; i++) {
+        const angle = (i / segments) * 2 * Math.PI;
+        const x1 = radius * Math.cos(angle) + radius;
+        const y1 = radius * Math.sin(angle) + radius;
+        coordinates += `${x1}, ${y1} `;
+    }
+    coordinates += 'Z';
+    return coordinates;
+};
+
 svg_private.buildDAttributeForShip = function (position, coordinates, guide, radius) {
     let dAttribute = `M ${coordinates.startingPoint.posX} ${coordinates.startingPoint.posY}`;
     coordinates.waypoints.forEach((waypoint) => {
@@ -124,14 +136,25 @@ svg_private.setBasicAttributes = function (elementType, className, fill, stroke,
     return element;
 };
 
-svg_.drawShipPaths = function (asteroids, position, radius, angle, curve1, curve2, guide, strokeWidth, stroke, fill) {
-    const coordinates = svg_private.buildCoordinatesObject(position, radius, angle, curve1, curve2);
+svg_private.drawShipPaths = function (asteroids, position, radius, angle, curve1, curve2, guide, strokeWidth, stroke, fill) {
+    const coordinates = svg_private.buildShipCoordinatesObject(position, radius, angle, curve1, curve2);
     const dAttribute = svg_private.buildDAttributeForShip(position, coordinates, guide, radius);
 
     const outputElement = svg_private.setBasicAttributes('path', 'ship', fill, stroke, strokeWidth);
 
     outputElement.setAttribute('d', dAttribute);
+    console.log(outputElement);
     asteroids.appendChild(outputElement);
+};
+svg_private.crateAsteroidsElement = function (asteroids, x, y, radius, segments, lineWidth, stroke, fill) {
+    const dAttribute = svg_private.buildAsteroidCoordinatesString(x, y, radius, segments);
+    const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
+    pathElement.setAttribute('d', dAttribute);
+    pathElement.setAttribute('stroke', 'black');
+    pathElement.setAttribute('fill', 'yellow');
+    pathElement.style.transform = `translate(${x - radius}px, ${y - radius}px)`;
+    return pathElement;
 };
 
 svg_.drawCircle = function (x, y, radius, fill = 'rgba(0, 0, 0, 0.405)', stroke = 'white', strokeWidth = '0.5px') {
@@ -157,7 +180,7 @@ svg_.drawShip = function (asteroids, position, radius, options = {}) {
         let guideCircle = svg_.drawCircle(position, position, radius);
         asteroids.appendChild(guideCircle);
     }
-    svg_.drawShipPaths(asteroids, position, radius, angle, curve1, curve2, guide, lineWidth, stroke, fill);
+    svg_private.drawShipPaths(asteroids, position, radius, angle, curve1, curve2, guide, lineWidth, stroke, fill);
 };
 
 svg_.rotateElement = function (asteroids, element, position, x, y, rotateValue) {
@@ -166,12 +189,21 @@ svg_.rotateElement = function (asteroids, element, position, x, y, rotateValue) 
     asteroids.appendChild(clonedElement);
 };
 
-svg_.drawAsteroid = function (asteroids, radius, segment, options = {}) {
+svg_.drawAsteroid = function (asteroids, x, y, radius, segments, options = {}) {
     //defaults:
     let lineWidth = options.lineWidth || 0.5;
     let stroke = options.stroke || 'white';
     let fill = options.fill || 'black';
     let guide = options.guide;
+
+    if (guide) {
+        let guideCircle = svg_.drawCircle(x, y, radius);
+        asteroids.appendChild(guideCircle);
+    }
+
+    const asteroidsElement = svg_private.crateAsteroidsElement(asteroids, x, y, radius, segments, lineWidth, stroke, fill);
+
+    asteroids.appendChild(asteroidsElement);
 };
 
 export default svg_;
