@@ -134,4 +134,15 @@ canvas_.drawAsteroid = function (ctx, radius, shape, options) {
     ctx.restore();
 };
 
+canvas_.drawPacman = function (context, x, y, radius, mouthPosition) {
+    context.strokeStyle = 'black';
+    context.lineWidth = 2;
+    context.fillStyle = 'yellow';
+    context.beginPath();
+    context.arc(x, y, radius, mouthPosition * 0.2 * Math.PI, (2 - mouthPosition * 0.2) * Math.PI);
+    context.lineTo(x, y);
+    context.fill();
+    context.closePath();
+    context.stroke();
+};
 export default canvas_;
