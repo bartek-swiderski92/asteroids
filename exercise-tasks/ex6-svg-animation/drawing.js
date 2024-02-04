@@ -1,23 +1,36 @@
 /** @format */
 import svg_ from '../modules/svg-game.js';
+import svg_pacman from '../modules/svg.js';
 
 const asteroids = document.querySelector('#asteroids');
 
-let radius = 50;
-let x = 0;
-// let startX = 0;
-let startX = svg_.getRandomNumber(radius, asteroids.clientWidth - radius);
-let xSpeed = 1;
-let increasingX = true;
+let radius = 40;
+let x = 0,
+    startX = 0,
+    // startX = svg_.getRandomNumber(radius, asteroids.clientWidth - radius),
+    xSpeed = 1.5,
+    increasingX = true;
 
-let y = 0;
-let ySpeed = 1;
-let increasingY = true;
-let gravity = 0.1;
+let y = asteroids.clientWidth / 5,
+    startY = 0,
+    ySpeed = 0,
+    increasingY = true,
+    gravity = 0.1;
+
+let mouth = 0;
+const pacman = {
+    x: startX,
+    y: startY,
+    radius: radius,
+    mouthAngle: 45,
+    fill: 'yellow'
+};
 
 svg_.drawGrid(asteroids);
-let circleEl = svg_.drawCircle(startX, radius, radius, 'circle', 'black', 'white', 1.5);
-asteroids.appendChild(circleEl);
+// svg_pacman.drawPacman(pacman);
+svg_pacman.animatePacman(pacman, 5);
+// let circleEl = svg_.drawCircle(startX, radius, radius, 'circle', 'black', 'white', 1.5);
+// asteroids.appendChild(circleEl);
 
 function frame() {
     draw();
@@ -25,19 +38,28 @@ function frame() {
 }
 
 function update() {
-    x += 1;
+    x += xSpeed;
     y += ySpeed;
     ySpeed += gravity;
 
-    if (y >= asteroids.clientHeight - radius * 2) {
+    if (y >= asteroids.clientHeight - radius) {
         //if you hit bottom
-        ySpeed *= -0.95; // move up instead of down
+        y = asteroids.clientHeight - radius;
+        ySpeed *= -0.6; // move up instead of down
+        xSpeed = 1.5;
     }
+
+    if (x <= 0 || x >= asteroids.clientWidth) {
+        x = (x + asteroids.clientWidth) % asteroids.clientWidth;
+    }
+    mouth = Math.abs(Math.sin((6 * Math.PI * x) / asteroids.clientWidth));
 }
 
 function draw() {
-    let circle = document.querySelector('.circle');
-    circle.setAttribute('style', `transform: translate(${x}px, ${y}px)`);
+    // let circle = document.querySelector('.circle');
+    // circle.setAttribute('style', `transform: translate(${x}px, ${y}px)`);
+    let pacman = document.querySelector('#pacman');
+    pacman.setAttribute('style', `transform: translate(${x}px, ${y}px)`);
 }
 
 setInterval(frame, 1000 / 60);
