@@ -75,8 +75,8 @@ svg_.drawPath = function (asteroids, coordinates, strokeWidth, stroke, fill, clo
     }
 };
 
-svg_.drawCircle = function (x, y, radius, fill = 'rgba(0, 0, 0, 0.405)', stroke = 'white', strokeWidth = '0.5px') {
-    let circleEl = svg_private.setBasicAttributes('circle', 'guide-circle', fill, stroke, strokeWidth);
+svg_.drawCircle = function (x, y, radius, className, fill = 'rgba(0, 0, 0, 0.405)', stroke = 'white', strokeWidth = '0.5px') {
+    let circleEl = svg_private.setBasicAttributes('circle', className, fill, stroke, strokeWidth);
     circleEl.setAttribute('cx', x);
     circleEl.setAttribute('cy', y);
     circleEl.setAttribute('r', radius);
@@ -170,7 +170,7 @@ svg_.drawAsteroid = function (asteroids, x, y, radius, segments, options = {}) {
     let noise = options.noise ?? 0.75;
 
     if (guide) {
-        const guideCircle = svg_.drawCircle(x, y, radius);
+        const guideCircle = svg_.drawCircle(x, y, radius, 'guide-circle');
         asteroids.appendChild(guideCircle);
     }
 
@@ -202,6 +202,10 @@ svg_private.buildAsteroidDAttribute = function (radius, segments, noise) {
     }
     coordinates += 'Z';
     return coordinates;
+};
+
+svg_.getRandomNumber = function (min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
 export default svg_;
