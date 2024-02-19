@@ -161,7 +161,7 @@ svg_private.buildDAttributeForShip = function (position, coordinates, guide, rad
     return dAttribute;
 };
 
-svg_.drawAsteroid = function (asteroids, x, y, radius, segments, options = {}) {
+svg_.drawAsteroid = function (asteroids, x, y, radius, segments, options = {}, id = 'asteroid') {
     //defaults:
     let lineWidth = options.lineWidth ?? 1.75;
     let stroke = options.stroke ?? 'white';
@@ -175,7 +175,7 @@ svg_.drawAsteroid = function (asteroids, x, y, radius, segments, options = {}) {
     }
 
     const asteroidsElement = svg_private.crateAsteroidsElement(x, y, radius, segments, lineWidth, stroke, fill, noise);
-
+    asteroidsElement.setAttribute('id', id);
     asteroids.appendChild(asteroidsElement);
 };
 
