@@ -1,27 +1,29 @@
 /** @format */
 import svg_ from '../modules/svg-game.js';
-import {PacMan} from '../modules/objects.js';
+import {Mass, Asteroid} from '../modules/objects.js';
 
 const asteroidsNode = document.querySelector('#asteroids');
-
-const pacman = new PacMan(150, 150, 20, 120);
+const mass = new Mass(asteroidsNode.clientWidth / 2, asteroidsNode.clientHeight / 2, 10, 20);
+const asteroid = new Asteroid(100, 100, 'asteroid', 10000);
+svg_.drawGrid(asteroidsNode);
 
 function draw() {
-    pacman.draw();
+    mass.draw(asteroidsNode);
+    asteroid.draw(asteroidsNode);
 }
 
 function update(elapsed) {
-    pacman.update(elapsed, 300, 300);
+    mass.update(elapsed, asteroidsNode);
 }
 
-let previous, elapsed;
+let previous;
 
 function frame(timestamp) {
     if (!previous) previous = timestamp;
-    elapsed = timestamp - previous;
+    let elapsed = timestamp - previous;
     update(elapsed / 1000);
-    draw();
     previous = timestamp;
     // window.requestAnimationFrame(frame);
 }
+draw();
 window.requestAnimationFrame(frame);

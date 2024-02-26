@@ -176,6 +176,7 @@ svg_.drawAsteroid = function (asteroids, x, y, radius, segments, options = {}, i
 
     const asteroidsElement = svg_private.crateAsteroidsElement(x, y, radius, segments, lineWidth, stroke, fill, noise);
     asteroidsElement.setAttribute('id', id);
+    console.log(asteroidsElement);
     asteroids.appendChild(asteroidsElement);
 };
 
