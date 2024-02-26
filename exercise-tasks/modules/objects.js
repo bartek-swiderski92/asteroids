@@ -1,6 +1,7 @@
 /** @format */
 
 import svg_ from '../modules/svg-game.js';
+import svg_pacman from '../modules/svg.js';
 
 export class Asteroid {
     constructor(asteroids, id, segments, radius, noise) {
@@ -42,5 +43,24 @@ export class Asteroid {
         // console.log(this);
         let asteroidNode = document.querySelector(`#${this.id}`);
         asteroidNode.setAttribute('style', `transform: translate(${this.x}px, ${this.y}px) rotate(${this.angle}rad)`);
+    };
+}
+
+export class PacMan {
+    constructor(x, y, radius, speed) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.mouthAngle = 0;
+        this.xSpeed = speed;
+        this.ySpeed = speed;
+        this.time = 0;
+        this.mouth = 0;
+        this.fill = 'yellow';
+    }
+
+    update = function (elapsed) {};
+    draw = function (elapsed) {
+        svg_pacman.drawPacman(this);
     };
 }

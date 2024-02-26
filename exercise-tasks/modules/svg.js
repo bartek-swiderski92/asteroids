@@ -187,6 +187,7 @@ svg_.drawPacman = function (pacman) {
     a ${radius} ${radius} 1 1 1 0 ${mouthY * -2}
     z`;
     let outputElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    console.log(outputElement);
     outputElement.setAttribute('id', 'pacman');
     outputElement.setAttribute('fill', fill);
 
@@ -223,7 +224,7 @@ svg_.animatePacman = function (pacman, growValue) {
         } else {
             svg_.drawPacman(pacman);
         }
-    }, 12);
+    }, 120);
 };
 
 export default svg_;
