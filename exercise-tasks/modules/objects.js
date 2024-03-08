@@ -15,11 +15,13 @@ export class Mass {
         this.rotationSpeed = rotationSpeed || 0;
     }
 
-    update(elapsed, asteroidsNode) {
+    update(elapsed) {
+        const asteroidsNode = document.querySelector('#asteroids');
         this.x += this.xSpeed * elapsed;
         this.y += this.ySpeed * elapsed;
         this.angle += this.rotationSpeed * elapsed;
         this.angle %= 2 * Math.PI;
+
         if (this.x - this.radius > asteroidsNode.clientWidth) {
             this.x = -this.radius;
         }
@@ -32,6 +34,7 @@ export class Mass {
         if (this.y + this.radius < 0) {
             this.y = asteroidsNode.clientHeight + this.radius;
         }
+        this.animateElement();
     }
 
     push(angle, force, elapsed) {
@@ -51,10 +54,9 @@ export class Mass {
         return Math.atan2(this.ySpeed, this.xSpeed);
     }
 
-    draw(asteroids) {
-        //TODO: finish method for the svg
-        const obj = svg_.drawCircle(this.x, this.y, this.radius, 'circle');
-        asteroids.appendChild(obj);
+    animateElement() {
+        const targetElement = document.querySelector(`#${this.id}`);
+        targetElement.setAttribute('style', `transform: translate(${this.x}px, ${this.y}px) rotate(${this.angle}rad)`);
     }
 }
 
@@ -90,7 +92,7 @@ export class Asteroid extends Mass {
     //     }
     // }
     draw(asteroidsNode) {
-        svg_.drawAsteroid(asteroidsNode, this.x, this.y, this.radius, this.segments, {noise: this.noise}, this.id);
+        svg_.drawAsteroid(asteroidsNode, 0, 0, this.radius, this.segments, {noise: this.noise}, this.id);
     }
     // update = function (elapsed) {
     //     if (this.x - this.radius + elapsed * this.xSpeed > asteroids.clientWidth) {
@@ -110,11 +112,21 @@ export class Asteroid extends Mass {
     //     this.angle = (this.angle + elapsed * this.rotationSpeed) % (2 * Math.PI);
     // };
 
-    animateAsteroid = function () {
-        // console.log(this);
-        let asteroidNode = document.querySelector(`#${this.id}`);
-        asteroidNode.setAttribute('style', `transform: translate(${this.x}px, ${this.y}px) rotate(${this.angle}rad)`);
-    };
+    // animateAsteroid = function () {
+    //     let asteroidNode = document.querySelector(`#${this.id}`);
+    //     asteroidNode.setAttribute('style', `transform: translate(${this.x}px, ${this.y}px) rotate(${this.angle}deg)`);
+    // };
+}
+
+export class Ship extends Mass {
+    constructor(x, y) {
+        super(x, y, 10, 30, 1.5 * Math.PI);
+        this.id = 'ship';
+        // constructor(x, y, mass, radius, angle, xSpeed, ySpeed, rotationSpeed) {
+    }
+    draw(asteroids) {
+        svg_.drawShip(asteroids, 0, 0, this.radius, {});
+    }
 }
 
 export class PacMan {
